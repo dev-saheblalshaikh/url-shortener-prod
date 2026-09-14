@@ -81,7 +81,7 @@ function BrandMark({ compact = false }) {
         <Link2 size={compact ? 18 : 24} />
       </span>
       <div>
-        <strong>LinkVaults</strong>
+        <strong>LinkVault</strong>
         {!compact && <span>Secure URL Manager</span>}
       </div>
     </div>
