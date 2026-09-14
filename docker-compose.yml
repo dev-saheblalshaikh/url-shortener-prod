@@ -42,6 +42,9 @@ services:
       - backend
     ports:
       - "80:80"
+      - "443:443"
+    volumes:
+      - /etc/letsencrypt/live/linkvaults.duckdns.org:/etc/nginx/certs:ro
     networks:
       - app-network
 
