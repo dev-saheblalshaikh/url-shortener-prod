@@ -390,50 +390,6 @@ th {
   background: #d3ece7;
 }
 
-.authShell.dark {
-  background: #0b0f14;
-}
-
-.authShell.dark .authPanel {
-  background: #161b22;
-  border-color: #2a313c;
-}
-
-.authShell.dark .brand strong {
-  color: #f1f5f9;
-}
-
-.authShell.dark .brand span {
-  color: #94a3b8;
-}
-
-.authShell.dark .panelTitle h1 {
-  color: #f1f5f9;
-}
-
-.authShell.dark input {
-  background: #1f242c;
-  border-color: #333b47;
-  color: #e5e7eb;
-}
-
-.authShell.dark input::placeholder {
-  color: #6b7280;
-}
-
-.authShell.dark .textButton {
-  color: #5eead4;
-}
-
-.authShell.dark .themeToggle {
-  background: #1f242c;
-  color: #5eead4;
-}
-
-.authShell.dark .themeToggle:hover {
-  background: #2a313c;
-}
-
 .passwordField {
   position: relative;
   display: flex;
@@ -455,10 +411,6 @@ th {
   padding: 0;
 }
 
-.authShell.dark .passwordToggle {
-  color: #94a3b8;
-}
-
 @keyframes copiedPop {
   0% { transform: scale(1); }
   40% { transform: scale(1.25); }
@@ -469,4 +421,88 @@ th {
   background: #d1fae5;
   color: #047857;
   animation: copiedPop 0.35s ease;
+}
+
+/* Dark mode overrides — applied whole-app via body.dark */
+
+body.dark {
+  background: #0b0f14;
+  color: #e5e7eb;
+}
+
+body.dark a {
+  color: #5eead4;
+}
+
+body.dark .brand span,
+body.dark .topbar p,
+body.dark .metric span,
+body.dark th,
+body.dark .empty {
+  color: #94a3b8;
+}
+
+body.dark .authPanel,
+body.dark .panel,
+body.dark .metric,
+body.dark .topbar {
+  background: #161b22;
+  border-color: #2a313c;
+}
+
+body.dark input {
+  background: #1f242c;
+  border-color: #333b47;
+  color: #e5e7eb;
+}
+
+body.dark input::placeholder {
+  color: #6b7280;
+}
+
+body.dark .textButton {
+  color: #5eead4;
+}
+
+body.dark .themeToggle,
+body.dark .iconButton {
+  background: #1f242c;
+  color: #5eead4;
+}
+
+body.dark .themeToggle:hover,
+body.dark .iconButton:hover {
+  background: #2a313c;
+}
+
+body.dark .iconButton.danger {
+  background: #3a1f22;
+  color: #fca5a5;
+}
+
+body.dark .iconButton.copied {
+  background: #14332a;
+  color: #34d399;
+}
+
+body.dark .result {
+  background: #10241f;
+  border-color: #1f4a3d;
+}
+
+body.dark th,
+body.dark td {
+  border-bottom-color: #2a313c;
+}
+
+body.dark .success {
+  color: #34d399;
+}
+
+body.dark .error {
+  color: #f87171;
+}
+
+body.dark .passwordToggle {
+  color: #94a3b8;
 }
