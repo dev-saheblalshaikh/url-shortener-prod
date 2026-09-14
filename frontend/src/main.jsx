@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { createRoot } from 'react-dom/client';
-import { Ban, BarChart3, Check, Clipboard, Link2, LogOut, RefreshCw, Shield, Trash2, UserCog, UserRound } from 'lucide-react';
+import { Ban, BarChart3, Check, Clipboard, Eye, EyeOff, Link2, LogOut, Moon, RefreshCw, Shield, Sun, Trash2, UserCog, UserRound } from 'lucide-react';
 import './styles.css';
 
 const API_BASE = import.meta.env.VITE_API_BASE_URL || '';
@@ -92,6 +92,8 @@ function AuthScreen({ mode, setMode, onSubmit, error }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [darkMode, setDarkMode] = useState(false);
 
   async function submit(event) {
     event.preventDefault();
@@ -104,7 +106,15 @@ function AuthScreen({ mode, setMode, onSubmit, error }) {
   }
 
   return (
-    <main className="authShell">
+    <main className={darkMode ? 'authShell dark' : 'authShell'}>
+      <button
+        type="button"
+        className="themeToggle"
+        onClick={() => setDarkMode(!darkMode)}
+        title={darkMode ? 'Switch to light mode' : 'Switch to dark mode'}
+      >
+        {darkMode ? <Sun size={18} /> : <Moon size={18} />}
+      </button>
       <section className="authPanel">
         <BrandMark />
         <div className="panelTitle">
@@ -119,14 +129,24 @@ function AuthScreen({ mode, setMode, onSubmit, error }) {
             onChange={(event) => setEmail(event.target.value)}
             required
           />
-          <input
-            type="password"
-            placeholder="password"
-            value={password}
-            onChange={(event) => setPassword(event.target.value)}
-            minLength={6}
-            required
-          />
+          <div className="passwordField">
+            <input
+              type={showPassword ? 'text' : 'password'}
+              placeholder="password"
+              value={password}
+              onChange={(event) => setPassword(event.target.value)}
+              minLength={6}
+              required
+            />
+            <button
+              type="button"
+              className="passwordToggle"
+              onClick={() => setShowPassword(!showPassword)}
+              title={showPassword ? 'Hide password' : 'Show password'}
+            >
+              {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+            </button>
+          </div>
           <button type="submit" disabled={loading}>
             {loading ? 'Please wait...' : mode === 'login' ? 'Sign in' : 'Register'}
           </button>
@@ -155,6 +175,7 @@ function Dashboard({ user, onLogout }) {
   const [error, setError] = useState('');
   const [notice, setNotice] = useState('');
   const [loading, setLoading] = useState(false);
+  const [copiedKey, setCopiedKey] = useState(null);
 
   const sortedRecentLinks = useMemo(() => recentLinks.slice(0, 6), [recentLinks]);
 
@@ -203,9 +224,11 @@ function Dashboard({ user, onLogout }) {
     }
   }
 
-  async function copy(value) {
+  async function copy(value, key) {
     await navigator.clipboard.writeText(value);
-    showNotice('Short URL copied');
+    showNotice('Copied!');
+    setCopiedKey(key);
+    window.setTimeout(() => setCopiedKey((current) => (current === key ? null : current)), 1500);
   }
 
   async function deleteLink(id) {
@@ -263,8 +286,13 @@ function Dashboard({ user, onLogout }) {
         {created && (
           <div className="result">
             <a href={created.shortUrl} target="_blank" rel="noreferrer">{created.shortUrl}</a>
-            <button type="button" className="iconButton" onClick={() => copy(created.shortUrl)} title="Copy URL">
-              <Clipboard size={18} />
+            <button
+              type="button"
+              className={copiedKey === 'created' ? 'iconButton copied' : 'iconButton'}
+              onClick={() => copy(created.shortUrl, 'created')}
+              title="Copy URL"
+            >
+              {copiedKey === 'created' ? <Check size={18} /> : <Clipboard size={18} />}
             </button>
           </div>
         )}
@@ -284,12 +312,12 @@ function Dashboard({ user, onLogout }) {
             <BarChart3 size={20} />
             <h2>Top Links</h2>
           </div>
-          <LinkTable links={topLinks} onCopy={copy} onDelete={deleteLink} />
+          <LinkTable links={topLinks} onCopy={copy} onDelete={deleteLink} copiedKey={copiedKey} />
         </div>
 
         <div className="panel">
           <h2>Recent Links</h2>
-          <LinkTable links={sortedRecentLinks} onCopy={copy} onDelete={deleteLink} />
+          <LinkTable links={sortedRecentLinks} onCopy={copy} onDelete={deleteLink} copiedKey={copiedKey} />
         </div>
       </section>
 
@@ -424,7 +452,7 @@ function Metric({ label, value }) {
   );
 }
 
-function LinkTable({ links, onCopy, onDelete }) {
+function LinkTable({ links, onCopy, onDelete, copiedKey }) {
   return (
     <div className="tableWrap">
       <table>
@@ -446,8 +474,13 @@ function LinkTable({ links, onCopy, onDelete }) {
               <td className="urlCell" title={link.originalUrl}>{link.originalUrl}</td>
               <td>{link.clickCount}</td>
               <td className="actions">
-                <button type="button" className="iconButton" onClick={() => onCopy(link.shortUrl)} title="Copy URL">
-                  <Clipboard size={16} />
+                <button
+                  type="button"
+                  className={copiedKey === link.id ? 'iconButton copied' : 'iconButton'}
+                  onClick={() => onCopy(link.shortUrl, link.id)}
+                  title="Copy URL"
+                >
+                  {copiedKey === link.id ? <Check size={16} /> : <Clipboard size={16} />}
                 </button>
                 <button type="button" className="iconButton danger" onClick={() => onDelete(link.id)} title="Delete URL">
                   <Trash2 size={16} />
