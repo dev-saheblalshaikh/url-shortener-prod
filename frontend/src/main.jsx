@@ -81,7 +81,7 @@ function BrandMark({ compact = false }) {
         <Link2 size={compact ? 18 : 24} />
       </span>
       <div>
-        <strong>LinkVault</strong>
+        <strong>LinkVaults</strong>
         {!compact && <span>Secure URL Manager</span>}
       </div>
     </div>
@@ -92,7 +92,6 @@ function AuthScreen({ mode, setMode, onSubmit, error }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
-  const [loginType, setLoginType] = useState('user');
 
   async function submit(event) {
     event.preventDefault();
@@ -104,40 +103,25 @@ function AuthScreen({ mode, setMode, onSubmit, error }) {
     }
   }
 
-  function chooseAdmin() {
-    setLoginType('admin');
-    if (mode === 'login' && !email) {
-      setEmail('admin@example.com');
-    }
-  }
-
   return (
     <main className="authShell">
       <section className="authPanel">
         <BrandMark />
         <div className="panelTitle">
-          {loginType === 'admin' ? <Shield size={22} /> : <UserRound size={22} />}
+          <UserRound size={22} />
           <h1>{mode === 'login' ? 'Sign in' : 'Create account'}</h1>
-        </div>
-        <div className="segmented">
-          <button type="button" className={loginType === 'user' ? 'active' : ''} onClick={() => setLoginType('user')}>
-            User
-          </button>
-          <button type="button" className={loginType === 'admin' ? 'active' : ''} onClick={chooseAdmin}>
-            Admin
-          </button>
         </div>
         <form className="authForm" onSubmit={submit}>
           <input
             type="email"
-            placeholder={loginType === 'admin' ? 'admin@example.com' : 'you@example.com'}
+            placeholder="you@example.com"
             value={email}
             onChange={(event) => setEmail(event.target.value)}
             required
           />
           <input
             type="password"
-            placeholder={loginType === 'admin' ? 'admin123' : 'password'}
+            placeholder="password"
             value={password}
             onChange={(event) => setPassword(event.target.value)}
             minLength={6}
