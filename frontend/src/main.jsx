@@ -29,6 +29,12 @@ function App() {
   const [checkingAuth, setCheckingAuth] = useState(true);
   const [authMode, setAuthMode] = useState('login');
   const [authError, setAuthError] = useState('');
+  const [darkMode, setDarkMode] = useState(() => localStorage.getItem('darkMode') === 'true');
+
+  useEffect(() => {
+    document.body.classList.toggle('dark', darkMode);
+    localStorage.setItem('darkMode', darkMode ? 'true' : 'false');
+  }, [darkMode]);
 
   useEffect(() => {
     api('/api/auth/me')
@@ -67,11 +73,13 @@ function App() {
         setMode={setAuthMode}
         onSubmit={handleAuth}
         error={authError}
+        darkMode={darkMode}
+        setDarkMode={setDarkMode}
       />
     );
   }
 
-  return <Dashboard user={user} onLogout={logout} />;
+  return <Dashboard user={user} onLogout={logout} darkMode={darkMode} setDarkMode={setDarkMode} />;
 }
 
 function BrandMark({ compact = false }) {
@@ -88,12 +96,11 @@ function BrandMark({ compact = false }) {
   );
 }
 
-function AuthScreen({ mode, setMode, onSubmit, error }) {
+function AuthScreen({ mode, setMode, onSubmit, error, darkMode, setDarkMode }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const [darkMode, setDarkMode] = useState(false);
 
   async function submit(event) {
     event.preventDefault();
@@ -106,7 +113,7 @@ function AuthScreen({ mode, setMode, onSubmit, error }) {
   }
 
   return (
-    <main className={darkMode ? 'authShell dark' : 'authShell'}>
+    <main className="authShell">
       <button
         type="button"
         className="themeToggle"
@@ -164,7 +171,7 @@ function AuthScreen({ mode, setMode, onSubmit, error }) {
   );
 }
 
-function Dashboard({ user, onLogout }) {
+function Dashboard({ user, onLogout, darkMode, setDarkMode }) {
   const [url, setUrl] = useState('');
   const [customAlias, setCustomAlias] = useState('');
   const [created, setCreated] = useState(null);
@@ -247,6 +254,14 @@ function Dashboard({ user, onLogout }) {
           </div>
         </div>
         <div className="topActions">
+          <button
+            className="iconButton"
+            type="button"
+            onClick={() => setDarkMode(!darkMode)}
+            title={darkMode ? 'Switch to light mode' : 'Switch to dark mode'}
+          >
+            {darkMode ? <Sun size={18} /> : <Moon size={18} />}
+          </button>
           <button className="iconButton" type="button" onClick={() => loadDashboard()} title="Refresh dashboard">
             <RefreshCw size={18} />
           </button>
