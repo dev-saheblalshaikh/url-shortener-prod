@@ -5,6 +5,16 @@ import './styles.css';
 
 const API_BASE = import.meta.env.VITE_API_BASE_URL || '';
 
+function LinkMark({ size = 24 }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M25 36c-4 4-10 4-14 0s-4-10 0-14l7-7c4-4 10-4 14 0 2 2 3 4 3 7" stroke="#ffffff" strokeWidth="6" strokeLinecap="round"/>
+      <path d="M39 28c4-4 10-4 14 0s4 10 0 14l-7 7c-4 4-10 4-14 0-2-2-3-4-3-7" stroke="#ffffff" strokeWidth="6" strokeLinecap="round"/>
+      <path d="M24 40l16-16" stroke="#a7f3d0" strokeWidth="6" strokeLinecap="round"/>
+    </svg>
+  );
+}
+
 async function api(path, options = {}) {
   const response = await fetch(`${API_BASE}${path}`, {
     credentials: 'include',
@@ -86,7 +96,7 @@ function BrandMark({ compact = false }) {
   return (
     <div className={compact ? 'brand compact' : 'brand'}>
       <span className="brandIcon">
-        <Link2 size={compact ? 18 : 24} />
+        <LinkMark size={compact ? 22 : 30} />
       </span>
       <div>
         <strong>LinkVaults</strong>
